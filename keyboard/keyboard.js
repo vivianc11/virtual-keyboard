@@ -24,9 +24,11 @@ const Keyboard = {
         this.elements.keysContainer = document.createElement('div');
 
         // setup main element by adding classes
-        this.elements.main.classList.add('keyboard', '1keyboard-hidden');
+        this.elements.main.classList.add('keyboard', 'keyboard-hidden');
         this.elements.keysContainer.classList.add('keyboard-keys');
         this.elements.keysContainer.appendChild(this._createKeys());
+
+        this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard-key')
 
         // Add keysContainer to the main container
         this.elements.main.appendChild(this.elements.keysContainer);
@@ -138,21 +140,44 @@ const Keyboard = {
 
     _triggerEvent(handlerName) {
         console.log('Event triggered by:' + handlerName)
+        // If the handlerName matches an existing function in the code...
+        if (typeof this.eventHandlers(handlerName) == 'function') {
+            this.eventHandlers[handlerName](this.properties.value);
+        }
     },
 
     _toggleCapsLock() {
-        console.log('Caps Lock Toggled!')
+        // flipping the value of the capslock
+       this.properties.capsLock = !this.properties.capsLock;
+
+       for (const key of this.elements.keys) {
+        if (key.childElementCount === 0) {
+            key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+        }
+       }
     },
 
     open(initialValue, oninput, onclose) {
+        this.properties.value = initialValue || '';
+        this.eventHandlers.oninput = oninput;
+        this.eventHandlers.onclose = onclose;
+        this.elements.main.classList.remove('keyboard-hidden');
 
     },
 
     close() {
-
+        this.value = '';
+        this.eventHandlers.oninput = oninput;
+        this.eventHandlers.onclose = onclose;
+        this.elements.main.classList.add('keyboard-hidden');
     }
 };
 
 window.addEventListener('DOMContentLoaded', function () {
     Keyboard.init();
+    Keyboard.open('dcode', function (currentValue) {
+        console.log("value changed to: " + currentValue)
+    }, function (currentValue) {
+        console.log('Keyboard Closed! Finishing value: ' + currentValue)
+    });
 })
