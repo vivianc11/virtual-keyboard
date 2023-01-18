@@ -26,6 +26,7 @@ const Keyboard = {
         // setup main element by adding classes
         this.elements.main.classList.add('keyboard', '1keyboard-hidden');
         this.elements.keysContainer.classList.add('keyboard-keys');
+        this.elements.keysContainer.appendChild(this._createKeys());
 
         // Add keysContainer to the main container
         this.elements.main.appendChild(this.elements.keysContainer);
@@ -94,7 +95,7 @@ const Keyboard = {
                 
                 case 'space':
                     keyElement.classList.add('keyboard-key-widest');
-                    keyElement.innerHTML = createIconHTML('spacebar');
+                    keyElement.innerHTML = createIconHTML('space_bar');
 
                     // function to remove last character
                     keyElement.addEventListener('click', () => {
@@ -115,10 +116,23 @@ const Keyboard = {
                     break;
 
                 default:
+                    keyElement.textContent = key.toLowerCase();
 
+                    keyElement.addEventListener('click' , () => {
+                        this.properties.value =+ this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
+                        this._triggerEvent('oninput');
+                    })
+            }
+
+            fragment.appendChild(keyElement);
+
+            if(insertLineBreak) {
+                fragment.appendChild(document.createElement('br'));
             }
 
         });
+
+        return fragment;
 
     },
 
