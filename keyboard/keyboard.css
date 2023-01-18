@@ -1,3 +1,12 @@
+h1 {
+    text-align: center;
+}
+
+.textbox {
+    display: flex;
+    justify-content: center;
+}
+
 .keyboard {
     position: fixed;
     left: 0;

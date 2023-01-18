@@ -34,6 +34,15 @@ const Keyboard = {
         this.elements.main.appendChild(this.elements.keysContainer);
         // Add main container to body of DOM
         document.body.appendChild(this.elements.main);
+
+        // Automatically use keyboard for elements with use-keyboard-input
+        document.querySelectorAll('.use-keyboard-input').forEach(element => {
+            element.addEventListener('focus', () => {
+                this.open(element.value, currentValue => {
+                    element.value = currentValue;
+                });
+            });
+        });
     },
 
     _createKeys() {
@@ -48,7 +57,7 @@ const Keyboard = {
             "space"
         ];
 
-        // Funciton to create HTML for an icon
+        // Function to create HTML for an icon
         const createIconHTML = (icon_name) => {
             return `<i class='material-icons'>${icon_name}</i>`
         };
@@ -90,7 +99,7 @@ const Keyboard = {
 
                     // function to add line break
                     keyElement.addEventListener('click', () => {
-                        this.properties.value += '/ln'
+                        this.properties.value += '\n'
                         this._triggerEvent('oninput');
                     })
                     break;
@@ -99,7 +108,7 @@ const Keyboard = {
                     keyElement.classList.add('keyboard-key-widest');
                     keyElement.innerHTML = createIconHTML('space_bar');
 
-                    // function to remove last character
+                    // function to add space
                     keyElement.addEventListener('click', () => {
                         this.properties.value += ' ';
                         this._triggerEvent('oninput');
@@ -121,7 +130,7 @@ const Keyboard = {
                     keyElement.textContent = key.toLowerCase();
 
                     keyElement.addEventListener('click' , () => {
-                        this.properties.value =+ this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
+                        this.properties.value += this.properties.capsLock ? key.toUpperCase() : key.toLowerCase();
                         this._triggerEvent('oninput');
                     })
             }
@@ -141,7 +150,7 @@ const Keyboard = {
     _triggerEvent(handlerName) {
         console.log('Event triggered by:' + handlerName)
         // If the handlerName matches an existing function in the code...
-        if (typeof this.eventHandlers(handlerName) == 'function') {
+        if (typeof this.eventHandlers[handlerName] == 'function') {
             this.eventHandlers[handlerName](this.properties.value);
         }
     },
@@ -166,7 +175,7 @@ const Keyboard = {
     },
 
     close() {
-        this.value = '';
+        this.properties.value = '';
         this.eventHandlers.oninput = oninput;
         this.eventHandlers.onclose = onclose;
         this.elements.main.classList.add('keyboard-hidden');
@@ -175,9 +184,9 @@ const Keyboard = {
 
 window.addEventListener('DOMContentLoaded', function () {
     Keyboard.init();
-    Keyboard.open('dcode', function (currentValue) {
-        console.log("value changed to: " + currentValue)
-    }, function (currentValue) {
-        console.log('Keyboard Closed! Finishing value: ' + currentValue)
-    });
+    // Keyboard.open('dcode', function (currentValue) {
+    //     console.log("value changed to: " + currentValue)
+    // }, function (currentValue) {
+    //     console.log('Keyboard Closed! Finishing value: ' + currentValue)
+    // });
 })
