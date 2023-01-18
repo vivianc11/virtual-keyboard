@@ -82,37 +82,40 @@ const Keyboard = {
                     break;
 
                 case 'enter':
-                keyElement.classList.add('keyboard-key-wide');
-                keyElement.innerHTML = createIconHTML('keyboard_return');
+                    keyElement.classList.add('keyboard-key-wide');
+                    keyElement.innerHTML = createIconHTML('keyboard_return');
 
-                // function to add line break
-                keyElement.addEventListener('click', () => {
-                    this.properties.value += '/ln'
-                    this._triggerEvent('oninput');
-                })
+                    // function to add line break
+                    keyElement.addEventListener('click', () => {
+                        this.properties.value += '/ln'
+                        this._triggerEvent('oninput');
+                    })
                     break;
                 
                 case 'space':
-                keyElement.classList.add('keyboard-key-widest');
-                keyElement.innerHTML = createIconHTML('spacebar');
+                    keyElement.classList.add('keyboard-key-widest');
+                    keyElement.innerHTML = createIconHTML('spacebar');
 
-                // function to remove last character
-                keyElement.addEventListener('click', () => {
-                    this.properties.value += ' ';
-                    this._triggerEvent('oninput');
-                })
+                    // function to remove last character
+                    keyElement.addEventListener('click', () => {
+                        this.properties.value += ' ';
+                        this._triggerEvent('oninput');
+                    })
                     break;
 
                 case 'done':
-                keyElement.classList.add('keyboard-key-wide', 'keyboard-key-dark');
-                keyElement.innerHTML = createIconHTML('check_circle');
+                    keyElement.classList.add('keyboard-key-wide', 'keyboard-key-dark');
+                    keyElement.innerHTML = createIconHTML('check_circle');
 
-                // function to close keyboard
-                keyElement.addEventListener('click', () => {
-                    this.close();
-                    this._triggerEvent('onclose');
-                })
+                    // function to close keyboard
+                    keyElement.addEventListener('click', () => {
+                        this.close();
+                        this._triggerEvent('onclose');
+                    })
                     break;
+
+                default:
+
             }
 
         });
